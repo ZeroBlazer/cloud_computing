@@ -1,7 +1,8 @@
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
-use std::collections::BTreeMap;
+// use std::collections::BTreeMap;
+use std::collections::HashMap;
 
 fn sanitize_word(input: &str) -> String {
     let ret: String = input.chars().filter(|c| c.is_alphabetic()).collect();
@@ -9,11 +10,12 @@ fn sanitize_word(input: &str) -> String {
 }
 
 fn main() {
-    let file = File::open("data/file2.txt").expect("Error opening file");
-    // let file = File::open("/run/media/rustycode/Storage_ext4/Downloads/ml-20m/ratings.csv").expect("Error opening file");
+    //let file = File::open("data/file2.txt").expect("Error opening file");
+     let file = File::open("/home/cs-unsax/Documents/ol_dump_works_2017-08-31.txt").expect("Error opening file");
     let reader = BufReader::new(file);
 
-    let mut frequency: BTreeMap<String, u32> = BTreeMap::new();
+    // let mut frequency: BTreeMap<String, u32> = BTreeMap::new();
+    let mut frequency: HashMap<String, u32> = HashMap::new();
 
     for line in reader.lines() {
         if let Ok(line) = line {
