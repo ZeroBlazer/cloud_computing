@@ -9,8 +9,9 @@ fn sanitize_word(input: &str) -> String {
 }
 
 fn main() {
-    let file = File::open("data/BOM.txt").expect("Error opening file");
-    let mut reader = BufReader::new(file);
+    let file = File::open("data/file2.txt").expect("Error opening file");
+    // let file = File::open("/run/media/rustycode/Storage_ext4/Downloads/ml-20m/ratings.csv").expect("Error opening file");
+    let reader = BufReader::new(file);
 
     let mut frequency: BTreeMap<String, u32> = BTreeMap::new();
 
@@ -24,5 +25,7 @@ fn main() {
         }
     }
     
-    println!("{:?}", frequency);
+    let mut ofile = File::create("Dictionary.txt").expect("Couldn't open write file");
+    write!(ofile, "{:#?}\n", frequency).expect("Couldn't write in file");
+    // println!("{:?}", frequency);
 }
