@@ -1,8 +1,11 @@
+extern crate rayon;
+
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
 // use std::collections::BTreeMap;
 use std::collections::HashMap;
+use rayon::prelude::*;
 
 fn sanitize_word(input: &str) -> String {
     let ret: String = input.chars().filter(|c| c.is_alphabetic()).collect();
@@ -10,12 +13,20 @@ fn sanitize_word(input: &str) -> String {
 }
 
 fn main() {
-    //let file = File::open("data/file2.txt").expect("Error opening file");
-     let file = File::open("/home/cs-unsax/Documents/ol_dump_works_2017-08-31.txt").expect("Error opening file");
+    let file = File::open("data/BOM.txt").expect("Error opening file");
+    //  let file = File::open("/home/cs-unsax/Documents/ol_dump_works_2017-08-31.txt").expect("Error opening file");
     let reader = BufReader::new(file);
 
     // let mut frequency: BTreeMap<String, u32> = BTreeMap::new();
     let mut frequency: HashMap<String, u32> = HashMap::new();
+
+    // for word in reader.split(b' ') {
+    //     if let Ok(word) = word {
+    //         *frequency.entry(sanitize_word(word as String)).or_insert(0) += 1;
+    //     } else {
+    //         println!("Error reading line");
+    //     }
+    // }
 
     for line in reader.lines() {
         if let Ok(line) = line {
