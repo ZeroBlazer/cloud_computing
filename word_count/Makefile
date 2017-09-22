@@ -1,28 +1,34 @@
+HADOOP_HOME = /home/rustycode/storage/Apps/hadoop-2.8.1
+
 run: jar
-	hadoop fs -rm -f -r  /user/cloudera/wordcount/output
-	hadoop jar wordcount.jar org.myorg.WordCount /user/cloudera/wordcount/input /user/cloudera/wordcount/output
+#hadoop fs -rm -f -r  /user/cloudera/wordcount/output
+	${HADOOP_HOME}/bin/hadoop jar wordcount.jar ../../../word_counter/data/BOM.txt output
 
 run_caseSensitive: jar
 	hadoop fs -rm -f -r  /user/cloudera/wordcount/output
-	hadoop jar wordcount.jar org.myorg.WordCount -Dwordcount.case.sensitive=true /user/cloudera/wordcount/input /user/cloudera/wordcount/output 
+	hadoop jar wordcount.jar com.rustycode.WordCount -Dwordcount.case.sensitive=true /user/cloudera/wordcount/input /user/cloudera/wordcount/output 
 
 run_stopwords: jar stopwords
 	hadoop fs -rm -f -r  /user/cloudera/wordcount/output
-	hadoop jar wordcount.jar org.myorg.WordCount /user/cloudera/wordcount/input /user/cloudera/wordcount/output -skip /user/cloudera/wordcount/stop_words.text
+	hadoop jar wordcount.jar com.rustycode.WordCount /user/cloudera/wordcount/input /user/cloudera/wordcount/output -skip /user/cloudera/wordcount/stop_words.text
 
-compile: build/org/myorg/WordCount.class
+compile: out/com/rustycode/WordCount.class
 
 jar: wordcount.jar
 
-wordcount.jar: build/org/myorg/WordCount.class
-	jar -cvf wordcount.jar -C build/ .
+change_dir:
+	~/storage/Dev/cloud_computing/word_count/out/production
 
-build/org/myorg/WordCount.class: WordCount.java
-	mkdir -p build
-	javac -cp /usr/lib/hadoop/*:/usr/lib/hadoop-mapreduce/* WordCount.java -d build -Xlint
+wordcount.jar: change_dir #out/com/rustycode/WordCount.class
+	jar -cvfe wordcount.jar com.rustycode.word_count.WordCount -C word_count/ .
+#jar -cvf wordcount.jar -C out/production/word_count/com/rustycode/word_count/ .
+
+out/com/rustycode/WordCount.class: WordCount.java
+	mkdir -p out
+	javac -cp /usr/lib/hadoop/*:/usr/lib/hadoop-mapreduce/* WordCount.java -d out -Xlint
 
 clean:
-	rm -rf build wordcount.jar
+	rm -rf out wordcount.jar
 
 data:
 	hadoop fs -rm -f -r /user/cloudera/wordcount/input

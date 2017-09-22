@@ -41,5 +41,6 @@
         <jarDirectory url="file://$MODULE_DIR$/../../../Apps/hadoop-2.8.1/share/hadoop/common/lib" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
   </component>
 </module>
