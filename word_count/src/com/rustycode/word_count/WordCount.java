@@ -1,8 +1,5 @@
 package com.rustycode.word_count;
 
-import java.io.IOException;
-import java.util.*;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.*;
@@ -13,10 +10,12 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import java.io.IOException;
+import java.util.*;
 
 public class WordCount {
     public static class TokenizerMapper
-            extends Mapper<Object, Text, Text, Text>{
+        extends Mapper<Object, Text, Text, Text> {
 
         private Text result = new Text();
         private Text word = new Text();
@@ -24,10 +23,13 @@ public class WordCount {
         public void map(Object key, Text value, Context context)
             throws IOException, InterruptedException {
 
+            kotlin.jvm.JvmClassMappingKt.getKotlinClass(Stemmer.class);
+            Stemmer stemmer = new Stemmer();
+
             StringTokenizer itr = new StringTokenizer(value.toString().toLowerCase().replaceAll("[^A-Za-z]", " "));
             String fileName = ((FileSplit) context.getInputSplit()).getPath().getName();
             while (itr.hasMoreTokens()) {
-                word.set(itr.nextToken());
+                word.set(stemmer.stem(itr.nextToken()));
                 result.set("<"+fileName + ", 1>");
                 context.write(word, result);
             }
@@ -126,7 +128,6 @@ public class WordCount {
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
         System.exit(job.waitForCompletion(true) ? 0 : 1);
-
     }
 }
 

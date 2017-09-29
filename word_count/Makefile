@@ -16,8 +16,11 @@ compile: out/com/rustycode/WordCount.class
 
 jar: wordcount.jar
 
+update_path:
+	export PATH=$PATH:~/storage/Apps/android-studio/jre/bin:/home/rustycode/storage/Apps/hadoop-2.8.1/bin
+
 change_dir:
-	~/storage/Dev/cloud_computing/word_count/out/production
+	cd ~/storage/Dev/cloud_computing/word_count/out/production
 
 wordcount.jar: change_dir #out/com/rustycode/WordCount.class
 	jar -cvfe wordcount.jar com.rustycode.word_count.WordCount -C word_count/ .
